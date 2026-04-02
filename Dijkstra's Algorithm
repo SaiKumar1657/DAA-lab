@@ -1,37 +1,42 @@
 
-
-import sys
-
 def dijkstra(graph, V, src):
-    dist = [sys.maxsize] * V
+    INF = 10**9  
+    dist = [INF] * V
     visited = [False] * V
 
     dist[src] = 0
 
     for _ in range(V):
-        min_dist = sys.maxsize
+        
+        min_dist = INF
         u = -1
-
         for i in range(V):
             if not visited[i] and dist[i] < min_dist:
                 min_dist = dist[i]
                 u = i
 
+        if u == -1:
+            break
+
         visited[u] = True
 
+        
         for v in range(V):
-            if graph[u][v] > 0 and not visited[v]:
+            if graph[u][v] != 0 and not visited[v]:
                 if dist[v] > dist[u] + graph[u][v]:
                     dist[v] = dist[u] + graph[u][v]
 
-    print("Vertex \t Distance from Source")
+    print("\nVertex \tDistance from Source")
     for i in range(V):
-        print(i, "\t", dist[i])
+        if dist[i] == INF:
+            print(f"{i} \tInfinity")
+        else:
+            print(f"{i} \t{dist[i]}")
 
 
 V = int(input("Enter number of vertices: "))
 
-print("Enter adjacency matrix:")
+print("Enter adjacency matrix (use 0 if no edge):")
 graph = []
 for i in range(V):
     row = list(map(int, input().split()))
@@ -40,3 +45,4 @@ for i in range(V):
 src = int(input("Enter source vertex: "))
 
 dijkstra(graph, V, src)
+
