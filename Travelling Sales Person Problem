@@ -1,0 +1,59 @@
+#include <stdio.h>
+#define MAX 20
+#define INF 99999
+
+int n, cost[MAX][MAX];
+int visited[MAX];
+
+
+int tsp(int city, int count, int costSoFar, int start) {
+    if (count == n && cost[city][start] != 0) {
+        return costSoFar + cost[city][start];
+    }
+
+    int minCost = INF;
+
+    for (int i = 0; i < n; i++) {
+        if (!visited[i] && cost[city][i] != 0) {
+            visited[i] = 1;
+
+            int currCost = tsp(i, count + 1,
+                               costSoFar + cost[city][i], start);
+
+            if (currCost < minCost)
+                minCost = currCost;
+
+            visited[i] = 0; 
+        }
+    }
+
+    return minCost;
+}
+
+int main() {
+    int i, j, start;
+
+    printf("Enter number of cities: ");
+    scanf("%d", &n);
+
+    printf("Enter cost matrix:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+        }
+    }
+
+    printf("Enter starting city (0 to %d): ", n - 1);
+    scanf("%d", &start);
+
+    for (i = 0; i < n; i++)
+        visited[i] = 0;
+
+    visited[start] = 1;
+
+    int minCost = tsp(start, 1, 0, start);
+
+    printf("Minimum travelling cost = %d\n", minCost);
+
+    return 0;
+}
